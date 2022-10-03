@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using eAgenda.Aplicacao.ModuloContato;
+using eAgenda.Aplicacao.ModuloTarefa;
 using eAgenda.Dominio.ModuloContato;
+using eAgenda.Dominio.ModuloTarefa;
 using eAgenda.Webapi.ViewModels.ModuloContato;
 using eAgenda.Webapi.ViewModels.ModuloTarefa;
 using Microsoft.AspNetCore.Authorization;
@@ -74,6 +76,42 @@ namespace eAgenda.Webapi.Controllers
                 sucesso = true,
                 dados = contatoVM
             });
+        }
+
+        [HttpPut("{id:guid}")]
+        public ActionResult<EditarContatoViewModel> Editar(Guid id, EditarContatoViewModel contatoVM)
+        {
+            var contatoSelecionadaResult = servicoContato.SelecionarPorId(id);
+
+            if (contatoSelecionadaResult.IsFailed && RegistroNaoEncontrado(contatoSelecionadaResult))
+                return NotFound(contatoSelecionadaResult);
+
+            var contato = mapeadorContatos.Map(contatoVM, contatoSelecionadaResult.Value);
+
+            var contatoResult = servicoContato.Editar(contato);
+
+            if (contatoResult.IsFailed)
+                return InternalError(contatoResult);
+
+            return Ok(new
+            {
+                sucesso = true,
+                dados = mapeadorContatos.Map<VisualizarContatoViewModel>(contatoResult.Value)
+            });
+        }
+
+        [HttpDelete("{id:guid}")]
+        public ActionResult Excluir(Guid id)
+        {
+            var contatoResult = servicoContato.Excluir(id);
+
+            if (contatoResult.IsFailed && RegistroNaoEncontrado<Contato>(contatoResult))
+                return NotFound(contatoResult);
+
+            if (contatoResult.IsFailed)
+                return InternalError<Contato>(contatoResult);
+
+            return NoContent();
         }
     }
 }
