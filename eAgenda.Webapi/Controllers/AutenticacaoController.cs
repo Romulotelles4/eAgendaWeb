@@ -38,7 +38,7 @@ namespace eAgenda.Webapi.Controllers
             return Ok(new
             {
                 sucesso = true,
-                dados = usuarioResult.Value
+                dados = GerarJwt(usuarioResult.Value)
             });
         }
 
@@ -56,6 +56,12 @@ namespace eAgenda.Webapi.Controllers
                 sucesso = true,
                 dados = GerarJwt(usuarioResult.Value)
             });
+        }
+        [HttpPost("sair")]
+        public async Task<ActionResult> Logout()
+        {
+            await servicoAutenticacao.Sair();
+            return Ok();
         }
 
         private TokenViewModel GerarJwt(Usuario usuario)

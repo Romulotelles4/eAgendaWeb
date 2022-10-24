@@ -1,7 +1,10 @@
-﻿namespace eAgenda.Webapi.ViewModels.ModuloContato
+﻿using System;
+
+namespace eAgenda.Webapi.ViewModels.ModuloContato
 {
     public class VisualizarContatoViewModel
     {
+        public Guid id { get; set; }
         public string Nome { get; set; }
         public string Email { get; set; }
         public string Telefone { get; set; }

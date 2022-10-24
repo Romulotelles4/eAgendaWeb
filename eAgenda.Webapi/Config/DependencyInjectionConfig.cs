@@ -9,6 +9,9 @@ using eAgenda.Infra.Configs;
 using eAgenda.Dominio.ModuloContato;
 using eAgenda.Infra.Orm.ModuloContato;
 using eAgenda.Aplicacao.ModuloContato;
+using eAgenda.Dominio.ModuloCompromisso;
+using eAgenda.Infra.Orm.ModuloCompromisso;
+using eAgenda.Aplicacao.ModuloCompromisso;
 
 namespace eAgenda.Webapi.Config
 {
@@ -26,9 +29,13 @@ namespace eAgenda.Webapi.Config
 
             services.AddScoped<IRepositorioContato, RepositorioContatoOrm>();
 
+            services.AddScoped<IRepositorioCompromisso, RepositorioCompromissoOrm>();
+            
+
             services.AddTransient<ServicoAutenticacao>();
             services.AddTransient<ServicoTarefa>();
             services.AddTransient<ServicoContato>();
+            services.AddTransient<ServicoCompromisso>();
 
         }
 
